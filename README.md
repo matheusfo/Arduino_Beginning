@@ -1,2 +1,2 @@
 # Arduino_Beginning
-Códigos usados nos projetos com arduino
+Códigos usados nos projetos básicos de eletrônica com arduino

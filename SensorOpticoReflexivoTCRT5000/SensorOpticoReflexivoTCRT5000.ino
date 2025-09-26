@@ -7,8 +7,7 @@ int fotoTransistor = 7;               // coletor do fototransistor = D7 do Ardui
  
 void setup(){ 
   pinMode(led, OUTPUT);               // pino do led indicador = saida  
-  pinMode(fotoTransistor, INPUT);     // pino do coletor do fototransistor = 
-entrada 
+  pinMode(fotoTransistor, INPUT);     // pino do coletor do fototransistor = entrada 
 } 
 void loop(){ 
   leituraSensor = digitalRead(fotoTransistor);  // leitura do sensor TCRT5000 

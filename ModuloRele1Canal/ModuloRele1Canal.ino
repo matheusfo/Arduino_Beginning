@@ -1,22 +1,37 @@
-// Exemplo 10  - Sensor Ótico Reflexivo TCRT5000 
+// Exemplo 9 - Módulo Relé 1 Canal 
 // Apostila Eletrogate - KIT BEGINNING 
- 
-int leituraSensor;                    // variavel de leitura do sensor  
-int led = 8;                          // led indicador = D8 do Arduino 
-int fotoTransistor = 7;               // coletor do fototransistor = D7 do Arduino  
+int buttonPin = 3;                        // pino D3 para botao 
+int ledPin =  13;                         // LED na placa Arduino 
+int IN1 = 2;                              // pino D2 para controle do rele 
+int ledState = LOW;                       // estado do LED = LOW 
+int buttonState;                          // variavel do estado do botao 
+int lastButtonState = LOW;                // estado previo do botao = LOW 
+unsigned long lastDebounceTime = 0;       // ultimo tempo de debounce 
+unsigned long debounceDelay = 50;         // timer do debounce 50 ms 
  
 void setup(){ 
-  pinMode(led, OUTPUT);               // pino do led indicador = saida  
-  pinMode(fotoTransistor, INPUT);     // pino do coletor do fototransistor = 
-entrada 
+  pinMode(ledPin, OUTPUT);                // pino do LED = saida 
+  pinMode(buttonPin, INPUT);              // pino do botao = entrada 
+  pinMode(IN1, OUTPUT);                   // pino de controle do rele = saida 
+  digitalWrite(ledPin, ledState);         // apaga o LED 
+  digitalWrite(IN1, ledState);            // desliga o rele 
 } 
 void loop(){ 
-  leituraSensor = digitalRead(fotoTransistor);  // leitura do sensor TCRT5000 
-  if (leituraSensor == 0 ){                      // se o led refletir a luz 
-    digitalWrite(led, HIGH);                    // acende LED indicador  
+  int reading = digitalRead(buttonPin);   // le o estado do botao 
+  if (reading != lastButtonState){        // se o estado for diferente do anterior 
+    lastDebounceTime = millis();          // reset do timer debouncing 
   } 
-  else {                                         // senão  
-    digitalWrite(led, LOW);                     // apaga LED indicador  
-  delay(500);                                   // atraso de 0,5 segundos 
+ 
+  if ((millis() - lastDebounceTime) > debounceDelay)  { 
+    // se o tempo do botao pressionado for maior do que debounce 
+    if (reading != buttonState){           // se o estado do botao for diferente do anterior 
+      buttonState = reading;              // muda o estado do botao 
+      if (buttonState == HIGH){            // se o botao esta no nivel High 
+       ledState = !ledState;             // muda o estado do LED 
+      } 
+    } 
   } 
-} 
+  digitalWrite(ledPin, ledState);         // seta o LED 
+  digitalWrite(IN1, ledState);            // seta o estado do rele 1 
+  lastButtonState = reading;              // salva a leitura do botao 
+}
